@@ -38,9 +38,8 @@ class TransactionAdmin(admin.ModelAdmin):
     list_display = ('id', 'property', 'buyer', 'seller', 'commission', 'is_paid', 'is_approved', 'created_at')
     list_filter = ('is_paid', 'is_approved', 'transaction_type')
     search_fields = ('property__title', 'buyer__username', 'seller__username')
-    actions = ['mark_as_paid', 'approve_payment']  # ✅ दुबै actions
+    actions = ['mark_as_paid', 'approve_payment']  
     
-    # ✅ पहिले Mark as Paid गर्ने
     def mark_as_paid(self, request, queryset):
         for transaction in queryset:
             transaction.is_paid = True
@@ -48,7 +47,6 @@ class TransactionAdmin(admin.ModelAdmin):
         self.message_user(request, f'{queryset.count()} transactions marked as paid.')
     mark_as_paid.short_description = 'Mark selected as paid'
     
-    # ✅ त्यसपछि Approve गर्ने
     def approve_payment(self, request, queryset):
         for transaction in queryset:
             if not transaction.is_paid:
@@ -69,11 +67,11 @@ class TransactionAdmin(admin.ModelAdmin):
             property.save()
             
             send_mail(
-                subject='🎉 Your deal is now complete!',
+                subject='Your deal is now complete!',
                 message=f"""
 Dear {transaction.buyer.username},
 
-🎉 Congratulations! Your deal has been approved and completed!
+Congratulations! Your deal has been approved and completed!
 
 Property: {transaction.property.title}
 Type: {transaction.transaction_type}

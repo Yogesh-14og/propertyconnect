@@ -1,0 +1,182 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fw-bold"><i class="fas fa-user-circle text-success me-2"></i>My Dashboard</h1>
+            <p class="text-muted">Welcome back, <strong>{{ user.username }}</strong>!</p>
+        </div>
+        <a href="{% url 'post_property' %}" class="btn btn-primary">
+            <i class="fas fa-plus-circle me-2"></i>Post New Property
+        </a>
+    </div>
+
+    <div class="row g-4">
+        <!-- My Properties -->
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">
+                        <i class="fas fa-home text-success me-2"></i>My Properties
+                        <span class="badge bg-secondary ms-2">{{ user_posts|length }}</span>
+                    </h5>
+                    <hr>
+                    {% if user_posts %}
+                        {% for post in user_posts %}
+                            <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+                                <div>
+                                    <a href="{% url 'property_detail' post.id %}" class="text-decoration-none fw-semibold">
+                                        {{ post.title }}
+                                    </a>
+                                    <p class="text-muted small mb-0">
+                                        <i class="fas fa-map-marker-alt me-1"></i>{{ post.location }}
+                                    </p>
+                                </div>
+                                <div class="d-flex gap-2 align-items-center">
+                                    <span class="badge 
+                                        {% if post.status == 'available' %}bg-success
+                                        {% elif post.status == 'sold' %}bg-danger
+                                        {% elif post.status == 'rented' %}bg-info
+                                        {% else %}bg-secondary{% endif %}">
+                                        {{ post.status|title }}
+                                    </span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted text-center py-3">
+                            <i class="fas fa-home fa-2x d-block mb-2"></i>
+                            You haven't posted any properties yet.
+                            <br>
+                            <a href="{% url 'post_property' %}" class="text-primary">Post your first property now</a>
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Favorites -->
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">
+                        <i class="fas fa-heart text-danger me-2"></i>Favorites
+                        <span class="badge bg-secondary ms-2">{{ favorites|length }}</span>
+                    </h5>
+                    <hr>
+                    {% if favorites %}
+                        {% for fav in favorites %}
+                            <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+                                <div>
+                                    <a href="{% url 'property_detail' fav.property.id %}" class="text-decoration-none fw-semibold">
+                                        {{ fav.property.title }}
+                                    </a>
+                                    <p class="text-muted small mb-0">
+                                        <i class="fas fa-map-marker-alt me-1"></i>{{ fav.property.location }}
+                                    </p>
+                                </div>
+                                <span class="text-muted small">रु {{ fav.property.price }}</span>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted text-center py-3">
+                            <i class="fas fa-heart fa-2x d-block mb-2"></i>
+                            No favorites yet.
+                            <br>
+                            <a href="{% url 'home' %}" class="text-primary">Browse properties</a> to add favorites.
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transactions -->
+    <div class="row g-4 mt-3">
+        <div class="col-md-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">
+                        <i class="fas fa-handshake text-success me-2"></i>My Transactions
+                        <span class="badge bg-secondary ms-2">{{ transactions|length }}</span>
+                    </h5>
+                    <hr>
+                    {% if transactions %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Property</th>
+                                        <th>Type</th>
+                                        <th>Price</th>
+                                        <th>Commission</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for t in transactions %}
+                                        <tr>
+                                            <td>
+                                                <a href="{% url 'property_detail' t.property.id %}" class="text-decoration-none fw-semibold">
+                                                    {{ t.property.title }}
+                                                </a>
+                                            </td>
+                                            <td><span class="badge-sell">{{ t.transaction_type }}</span></td>
+                                            <td>Rs. {{ t.price }}</td>
+                                            <td>Rs. {{ t.commission }}</td>
+                                            <td>
+                                                {% if t.is_approved %}
+                                                    <span class="badge bg-success">Approved ✅</span>
+                                                {% else %}
+                                                    <span class="badge bg-warning">Pending ⏳</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <a href="{% url 'transaction_detail' t.id %}" class="btn btn-primary btn-sm">
+                                                    <i class="fas fa-eye"></i> View
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted text-center py-3">No transactions yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="row g-4 mt-3">
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 text-center">
+                <div class="card-body">
+                    <h2 class="fw-bold text-success">{{ user_posts|length }}</h2>
+                    <p class="text-muted small">Properties Posted</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 text-center">
+                <div class="card-body">
+                    <h2 class="fw-bold text-danger">{{ favorites|length }}</h2>
+                    <p class="text-muted small">Favorites</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 text-center">
+                <div class="card-body">
+                    <h2 class="fw-bold text-primary">{{ transactions|length }}</h2>
+                    <p class="text-muted small">Transactions</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

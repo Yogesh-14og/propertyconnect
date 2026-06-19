@@ -1,0 +1,136 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<style>
+    .animate-fade {
+        opacity: 0;
+        animation: fadeUp 0.8s ease forwards;
+    }
+    .animate-delay-1 { animation-delay: 0.2s; }
+    .animate-delay-2 { animation-delay: 0.4s; }
+    .animate-delay-3 { animation-delay: 0.6s; }
+    
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .stat-card {
+        transition: all 0.3s ease;
+        cursor: default;
+    }
+    .stat-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    }
+    
+    .feature-icon {
+        font-size: 2.5rem;
+        color: #1A7F64;
+        margin-bottom: 1rem;
+        transition: transform 0.3s ease;
+    }
+    .feature-item:hover .feature-icon {
+        transform: scale(1.2) rotate(5deg);
+    }
+</style>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 text-center animate-fade">
+            <h1 class="fw-bold mb-3" style="color: #1A2A3A;">
+                <i class="fas fa-home me-2" style="color: #D4AF37;"></i>
+                About PropertyConnect
+            </h1>
+            <p class="lead text-muted">Nepal's trusted property marketplace</p>
+            <div class="divider mx-auto" style="width: 80px; height: 4px; background: #D4AF37; border-radius: 4px; margin: 20px auto;"></div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6 animate-fade animate-delay-1">
+            <div class="card border-0 shadow-sm h-100 p-4">
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        <i class="fas fa-bullseye fa-3x" style="color: #1A7F64;"></i>
+                    </div>
+                    <h5 class="fw-bold text-center">Our Mission</h5>
+                    <p class="text-muted text-center">To connect property buyers, sellers, and renters across Nepal with a simple, transparent, and trustworthy platform.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 animate-fade animate-delay-2">
+            <div class="card border-0 shadow-sm h-100 p-4">
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        <i class="fas fa-eye fa-3x" style="color: #D4AF37;"></i>
+                    </div>
+                    <h5 class="fw-bold text-center">Our Vision</h5>
+                    <p class="text-muted text-center">To become Nepal's most trusted and largest property marketplace, empowering every Nepali to find their dream home.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4 g-4">
+        <div class="col-md-3 col-6 animate-fade animate-delay-1">
+            <div class="stat-card card border-0 shadow-sm text-center p-3">
+                <div class="card-body">
+                    <h2 class="fw-bold" style="color: #1A7F64;">500+</h2>
+                    <p class="text-muted small">Happy Customers</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6 animate-fade animate-delay-2">
+            <div class="stat-card card border-0 shadow-sm text-center p-3">
+                <div class="card-body">
+                    <h2 class="fw-bold" style="color: #D4AF37;">50+</h2>
+                    <p class="text-muted small">Cities Covered</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6 animate-fade animate-delay-3">
+            <div class="stat-card card border-0 shadow-sm text-center p-3">
+                <div class="card-body">
+                    <h2 class="fw-bold" style="color: #1A7F64;">24/7</h2>
+                    <p class="text-muted small">Customer Support</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6 animate-fade animate-delay-3">
+            <div class="stat-card card border-0 shadow-sm text-center p-3">
+                <div class="card-body">
+                    <h2 class="fw-bold" style="color: #D4AF37;">100%</h2>
+                    <p class="text-muted small">Trusted Platform</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5 animate-fade animate-delay-2">
+        <div class="col-12">
+            <h4 class="fw-bold text-center mb-4"><i class="fas fa-star me-2" style="color: #D4AF37;"></i>What We Offer</h4>
+            <div class="row g-3">
+                <div class="col-md-3 col-6"><div class="feature-item text-center p-3"><div class="feature-icon"><i class="fas fa-check-circle"></i></div><p class="small fw-semibold mb-0">Verified Listings</p></div></div>
+                <div class="col-md-3 col-6"><div class="feature-item text-center p-3"><div class="feature-icon"><i class="fas fa-search"></i></div><p class="small fw-semibold mb-0">Easy Search</p></div></div>
+                <div class="col-md-3 col-6"><div class="feature-item text-center p-3"><div class="feature-icon"><i class="fas fa-phone"></i></div><p class="small fw-semibold mb-0">Direct Contact</p></div></div>
+                <div class="col-md-3 col-6"><div class="feature-item text-center p-3"><div class="feature-icon"><i class="fas fa-shield-alt"></i></div><p class="small fw-semibold mb-0">Secure Transactions</p></div></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5 animate-fade animate-delay-3">
+        <div class="col-12">
+            <h4 class="fw-bold text-center mb-4"><i class="fas fa-heart me-2" style="color: #D4AF37;"></i>Why Choose Us?</h4>
+            <div class="card border-0 shadow-sm p-4">
+                <div class="row g-3">
+                    <div class="col-md-3 col-6 text-center"><i class="fas fa-smile fa-2x" style="color: #1A7F64;"></i><p class="small fw-semibold mt-2">500+ Happy Customers</p></div>
+                    <div class="col-md-3 col-6 text-center"><i class="fas fa-city fa-2x" style="color: #D4AF37;"></i><p class="small fw-semibold mt-2">50+ Cities Covered</p></div>
+                    <div class="col-md-3 col-6 text-center"><i class="fas fa-headset fa-2x" style="color: #1A7F64;"></i><p class="small fw-semibold mt-2">24/7 Support</p></div>
+                    <div class="col-md-3 col-6 text-center"><i class="fas fa-flag fa-2x" style="color: #D4AF37;"></i><p class="small fw-semibold mt-2">Made in Nepal ❤️</p></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

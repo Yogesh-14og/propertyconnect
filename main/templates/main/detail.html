@@ -1,0 +1,235 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<style>
+    .avg-rating {
+        font-size: 0.95rem;
+        color: #ffffff !important;
+        font-weight: 500;
+    }
+</style>
+
+<div class="container py-4">
+    <div class="row">
+        <div class="col-md-8">
+            <!-- Main Image - Click to open modal -->
+            {% if post.image %}
+                <img src="{{ post.image.url }}" alt="{{ post.title }}" 
+                     class="img-fluid rounded mb-4" 
+                     style="max-height: 400px; width: 100%; object-fit: cover; cursor: pointer;"
+                     data-bs-toggle="modal" data-bs-target="#imageModal"
+                     onclick="openImageModal('{{ post.image.url }}')">
+            {% else %}
+                <div class="bg-secondary d-flex align-items-center justify-content-center rounded mb-4" style="height: 300px; color: #fff; cursor: pointer;">
+                    <i class="fas fa-home fa-5x"></i>
+                </div>
+            {% endif %}
+
+            <!-- Additional Images -->
+            {% if post.images.all %}
+                <div class="row g-2 mb-4">
+                    {% for img in post.images.all %}
+                        <div class="col-3">
+                            <img src="{{ img.image.url }}" alt="Property image" 
+                                 class="img-fluid rounded" 
+                                 style="height: 100px; width: 100%; object-fit: cover; cursor: pointer;"
+                                 data-bs-toggle="modal" data-bs-target="#imageModal"
+                                 onclick="openImageModal('{{ img.image.url }}')">
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <h1 class="fw-bold">{{ post.title }}</h1>
+            <p class="text-muted"><i class="fas fa-map-marker-alt text-danger me-1"></i> {{ post.location }}</p>
+            <div class="d-flex gap-2 mb-3">
+                <span class="badge-sell">{{ post.get_property_type_display }}</span>
+                <span class="badge-rent">{{ post.bedrooms }} BHK</span>
+                <span class="badge-buy">{{ post.area }} sqft</span>
+            </div>
+            <div class="mb-4">
+                <h3 class="price-tag">रु {{ post.price }}</h3>
+                <span class="text-muted small"><i class="fas fa-eye me-1"></i> {{ post.views }} views</span>
+            </div>
+            <div class="card bg-light p-4 mb-4">
+                <h5>Description</h5>
+                <p class="text-muted">{{ post.description }}</p>
+            </div>
+
+            <!-- Owner Contact Details -->
+            <div class="card border-0 shadow-sm p-4 mb-4">
+                <h5><i class="fas fa-address-card me-2" style="color: #1A7F64;"></i>Contact Details</h5>
+                <hr>
+                <p class="mb-2">
+                    <i class="fas fa-user me-2" style="color: #1A7F64;"></i> 
+                    <strong>{{ post.user.username }}</strong>
+                </p>
+                <p class="mb-2">
+                    <i class="fas fa-phone me-2" style="color: #1A7F64;"></i> 
+                    {% if post.phone %}
+                        <a href="tel:{{ post.phone }}" class="text-decoration-none text-dark fw-bold">
+                            {{ post.phone }}
+                        </a>
+                    {% else %}
+                        <span class="text-muted">No contact number provided</span>
+                    {% endif %}
+                </p>
+                <p class="mb-0">
+                    <i class="fas fa-clock me-2" style="color: #1A7F64;"></i> 
+                    Posted on: {{ post.created_at|date:"M d, Y" }}
+                </p>
+            </div>
+
+            <div class="d-flex gap-3">
+                <p class="text-muted small"><i class="fas fa-user-circle me-1"></i> Posted by {{ post.user.username }}</p>
+                <p class="text-muted small"><i class="fas fa-clock me-1"></i> {{ post.created_at|date:"M d, Y" }}</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card bg-dark p-4 text-white">
+            <h5>Actions</h5>
+            <hr>
+            
+            {% if user.is_authenticated %}
+                <!-- Favorite Button -->
+                <button class="btn btn-primary w-100 mb-2" onclick="toggleFavorite('{{ post.id }}')">
+                    <i class="fas fa-heart"></i>
+                    {% if is_favorited %}Remove from{% else %}Add to{% endif %} Favorites
+                </button>
+
+                <!-- Contact Owner -->
+                <a href="{% url 'contact_owner' post.id %}" class="btn btn-outline-light w-100 mb-2">
+                    <i class="fas fa-envelope me-2"></i> Contact Owner
+                </a>
+
+                <!-- Send Message / Reply -->
+                {% if user == post.user %}
+                    <a href="{% url 'send_message' post.id %}" class="btn btn-outline-warning w-100 mb-2">
+                        <i class="fas fa-reply me-2"></i> Reply to Buyer
+                    </a>
+                {% else %}
+                    <a href="{% url 'send_message' post.id %}" class="btn btn-outline-info w-100 mb-2">
+                        <i class="fas fa-paper-plane me-2"></i> Send Message
+                    </a>
+                {% endif %}
+
+                <!-- Complete Deal -->
+                {% if user != post.user and post.status == 'available' %}
+                    <a href="{% url 'complete_deal' post.id %}" class="btn btn-success w-100 mb-2">
+                        <i class="fas fa-handshake me-2"></i> Complete Deal (1% Commission)
+                    </a>
+                {% endif %}
+
+                <!-- Rating Buttons -->
+                <div class="mb-3">
+                    <label class="form-label text-white">Rate this property</label>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <button class="btn btn-outline-light btn-sm" onclick="rateProperty('{{ post.id }}', 1)">1 ⭐</button>
+                        <button class="btn btn-outline-light btn-sm" onclick="rateProperty('{{ post.id }}', 2)">2 ⭐</button>
+                        <button class="btn btn-outline-light btn-sm" onclick="rateProperty('{{ post.id }}', 3)">3 ⭐</button>
+                        <button class="btn btn-outline-light btn-sm" onclick="rateProperty('{{ post.id }}', 4)">4 ⭐</button>
+                        <button class="btn btn-outline-light btn-sm" onclick="rateProperty('{{ post.id }}', 5)">5 ⭐</button>
+                    </div>
+                </div>
+
+                <!-- Average Rating -->
+                <div class="text-center">
+                    <span class="text-muted avg-rating">
+                        {% if avg_rating > 0 %}
+                            Average Rating: {{ avg_rating|floatformat:1 }} ⭐
+                        {% else %}
+                            No ratings yet
+                        {% endif %}
+                    </span>
+                </div>
+            {% else %}
+                <p class="text-muted"><a href="{% url 'login' %}" class="text-warning">Login</a> to interact</p>
+            {% endif %}
+
+            <hr>
+            <a href="{% url 'home' %}" class="btn btn-outline-light w-100">
+                <i class="fas fa-arrow-left me-2"></i> Back
+            </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Image Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content bg-dark">
+            <div class="modal-header border-0">
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalImage" src="" alt="Property Image" class="img-fluid rounded" style="max-height: 80vh;">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function toggleFavorite(pk) {
+    fetch('/favorite/' + pk + '/')
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+            location.reload();
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+function rateProperty(pk, rating) {
+    if (!confirm('Rate this property ' + rating + ' stars?')) return;
+    
+    fetch('/rate/' + pk + '/', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'rating=' + rating
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.status === 'success') {
+            alert('Rated ' + rating + ' stars successfully!');
+            location.reload();
+        } else {
+            alert('Error: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Something went wrong. Check console.');
+    });
+}
+
+// Image Modal
+function openImageModal(imageUrl) {
+    document.getElementById('modalImage').src = imageUrl;
+}
+</script>
+{% endblock %}

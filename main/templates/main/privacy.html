@@ -1,0 +1,100 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<style>
+    .animate-fade {
+        opacity: 0;
+        animation: fadeUp 0.8s ease forwards;
+    }
+    .animate-delay-1 { animation-delay: 0.2s; }
+    .animate-delay-2 { animation-delay: 0.4s; }
+    .animate-delay-3 { animation-delay: 0.6s; }
+    
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .privacy-section {
+        transition: all 0.3s ease;
+    }
+    .privacy-section:hover {
+        transform: translateX(5px);
+    }
+</style>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 text-center animate-fade">
+            <h1 class="fw-bold mb-3" style="color: #1A2A3A;">
+                <i class="fas fa-shield-alt me-2" style="color: #D4AF37;"></i>
+                Privacy Policy
+            </h1>
+            <p class="lead text-muted">How we protect your data</p>
+            <div class="divider mx-auto" style="width: 80px; height: 4px; background: #D4AF37; border-radius: 4px; margin: 20px auto;"></div>
+            <p class="text-muted small">Last updated: June 2026</p>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12 animate-fade animate-delay-1">
+            <div class="card border-0 shadow-sm p-4 privacy-section">
+                <h5 class="fw-bold"><i class="fas fa-database me-2" style="color: #1A7F64;"></i>Information We Collect</h5>
+                <ul class="mt-3">
+                    <li>Name and contact information</li>
+                    <li>Property preferences and search history</li>
+                    <li>Communication history with property owners</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12 animate-fade animate-delay-2">
+            <div class="card border-0 shadow-sm p-4 privacy-section">
+                <h5 class="fw-bold"><i class="fas fa-cogs me-2" style="color: #D4AF37;"></i>How We Use Your Information</h5>
+                <ul class="mt-3">
+                    <li>To connect you with property owners and buyers</li>
+                    <li>To improve our services and user experience</li>
+                    <li>To send relevant property updates and recommendations</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12 animate-fade animate-delay-3">
+            <div class="card border-0 shadow-sm p-4 privacy-section">
+                <h5 class="fw-bold"><i class="fas fa-lock me-2" style="color: #1A7F64;"></i>Data Security</h5>
+                <ul class="mt-3">
+                    <li>We use SSL encryption for all data transmission</li>
+                    <li>Your data is stored securely in encrypted databases</li>
+                    <li>We never share your data without explicit consent</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12 animate-fade animate-delay-3">
+            <div class="card border-0 shadow-sm p-4 privacy-section">
+                <h5 class="fw-bold"><i class="fas fa-file-contract me-2" style="color: #D4AF37;"></i>Your Rights</h5>
+                <ul class="mt-3">
+                    <li>You can request to view your data anytime</li>
+                    <li>You can request to delete your data</li>
+                    <li>You can opt-out of marketing communications</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4 animate-fade animate-delay-3">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm p-4 text-center" style="background: #F8FAFC;">
+                <h5 class="fw-bold"><i class="fas fa-envelope me-2" style="color: #D4AF37;"></i>Contact Us</h5>
+                <p>If you have questions about our privacy policy, contact us at <strong>info@propertyconnect.com</strong></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

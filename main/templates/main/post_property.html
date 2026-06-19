@@ -1,0 +1,76 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="card shadow-lg border-0" style="width: 100%; max-width: 700px; background: #fff; border-radius: 16px;">
+        <div class="card-body p-5">
+            <div class="text-center mb-4">
+                <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex p-3 mb-3">
+                    <i class="fas fa-plus-circle fa-2x" style="color: #1A7F64;"></i>
+                </div>
+                <h3 class="fw-bold" style="color: #1A2A3A;">Post Your Property</h3>
+                <p class="text-muted small">Reach thousands of buyers and renters</p>
+            </div>
+
+            <!-- ✅ enctype="multipart/form-data" → Photo upload ko lagi -->
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label class="form-label"><i class="fas fa-heading me-2" style="color: #1A7F64;"></i>Title</label>
+                        <input type="text" name="title" class="form-control" placeholder="e.g., Modern Apartment in Kathmandu" required>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label"><i class="fas fa-align-left me-2" style="color: #1A7F64;"></i>Description</label>
+                        <textarea name="description" class="form-control" rows="3" placeholder="Describe your property..." required></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label"><i class="fas fa-money-bill-wave me-2" style="color: #1A7F64;"></i>Price (Rs.)</label>
+                        <input type="number" name="price" class="form-control" placeholder="2500000" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label"><i class="fas fa-map-pin me-2" style="color: #1A7F64;"></i>Location</label>
+                        <input type="text" name="location" class="form-control" placeholder="e.g., Kathmandu" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label"><i class="fas fa-tag me-2" style="color: #1A7F64;"></i>Property Type</label>
+                        <select name="property_type" class="form-select">
+                            <option value="sell">For Sale</option>
+                            <option value="rent">For Rent</option>
+                            <option value="buy">Looking to Buy</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label"><i class="fas fa-bed me-2" style="color: #1A7F64;"></i>BHK</label>
+                        <input type="number" name="bedrooms" class="form-control" placeholder="3">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label"><i class="fas fa-arrows-alt me-2" style="color: #1A7F64;"></i>Area (sqft)</label>
+                        <input type="number" name="area" class="form-control" placeholder="1200">
+                    </div>
+                    <div class="col-md-7">
+                        <label class="form-label"><i class="fas fa-phone me-2" style="color: #1A7F64;"></i>Contact Number</label>
+                        <input type="text" name="phone" class="form-control" placeholder="e.g., 98XXXXXXXX" required>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label"><i class="fas fa-image me-2" style="color: #1A7F64;"></i>Main Image</label>
+                        <input type="file" name="image" class="form-control" accept="image/*" required>
+                        <small class="text-muted">This image will appear on the homepage</small>
+                    </div>
+
+                    <!-- Multiple Images -->
+                    <div class="col-12">
+                        <label class="form-label"><i class="fas fa-images me-2" style="color: #1A7F64;"></i>Additional Images</label>
+                        <input type="file" name="images" class="form-control" accept="image/*" multiple>
+                        <small class="text-muted">You can select multiple images (Hold Ctrl/Cmd to select multiple)</small>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 mt-4 py-2">
+                    <i class="fas fa-cloud-upload-alt me-2"></i> Publish Property
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

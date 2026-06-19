@@ -1,0 +1,43 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-reply fa-3x" style="color: #1A7F64;"></i>
+                        <h3 class="fw-bold mt-2">Reply to Message</h3>
+                        <p class="text-muted">Reply to <strong>{{ receiver.username }}</strong></p>
+                    </div>
+                    
+                    <!-- Original Message -->
+                    <div class="card bg-light p-3 mb-3">
+                        <p class="mb-1"><strong>Original Message:</strong></p>
+                        <p class="mb-1"><strong>{{ original_message.subject }}</strong></p>
+                        <p class="text-muted small mb-0">{{ original_message.message|truncatechars:100 }}</p>
+                    </div>
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">Subject</label>
+                            <input type="text" name="subject" class="form-control" 
+                                   value="Re: {{ original_message.subject }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Message</label>
+                            <textarea name="message" class="form-control" rows="5" 
+                                      placeholder="Write your reply..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">
+                            <i class="fas fa-paper-plane me-2"></i> Send Reply
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="card shadow-lg border-0" style="width: 100%; max-width: 600px; background: #fff; border-radius: 16px;">
+        <div class="card-body p-5">
+            <div class="text-center mb-4">
+                <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex p-3 mb-3">
+                    <i class="fas fa-envelope fa-2x" style="color: #1A7F64;"></i>
+                </div>
+                <h3 class="fw-bold" style="color: #1A2A3A;">Contact Owner</h3>
+                <p class="text-muted small">Send a message to the property owner about <strong>{{ property.title }}</strong></p>
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label"><i class="fas fa-user me-2" style="color: #1A7F64;"></i>Your Name</label>
+                    <input type="text" name="name" class="form-control" placeholder="Enter your full name" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label"><i class="fas fa-envelope me-2" style="color: #1A7F64;"></i>Your Email</label>
+                    <input type="email" name="email" class="form-control" placeholder="Enter your email" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label"><i class="fas fa-phone me-2" style="color: #1A7F64;"></i>Phone Number</label>
+                    <input type="text" name="phone" class="form-control" placeholder="Enter your phone number" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label"><i class="fas fa-comment me-2" style="color: #1A7F64;"></i>Message</label>
+                    <textarea name="message" class="form-control" rows="4" placeholder="Write your message to the owner..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 py-2">
+                    <i class="fas fa-paper-plane me-2"></i> Send Message
+                </button>
+            </form>
+
+            <div class="mt-3 text-center">
+                <a href="{% url 'property_detail' property.id %}" class="text-muted small">
+                    <i class="fas fa-arrow-left me-1"></i> Back to Property
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

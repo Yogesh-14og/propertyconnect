@@ -1,0 +1,80 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-handshake fa-3x" style="color: #1A7F64;"></i>
+                        <h3 class="fw-bold mt-2">Complete the Deal</h3>
+                        <p class="text-muted">Pay 1% commission to confirm the deal</p>
+                    </div>
+                    
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <strong>No Dalal!</strong> Direct deal. Only 1% commission.
+                    </div>
+                    
+                    <div class="card bg-light p-3 mb-3">
+                        <p><strong>Property:</strong> {{ property.title }}</p>
+                        <p><strong>Location:</strong> {{ property.location }}</p>
+                        <p><strong>Owner:</strong> {{ property.user.username }}</p>
+                    </div>
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">Transaction Type</label>
+                            <select name="transaction_type" class="form-select" required>
+                                <option value="sale">Sale</option>
+                                <option value="rent">Rent</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Property Price (Rs.)</label>
+                            <input type="number" name="price" class="form-control" 
+                                   placeholder="Enter final price" required>
+                        </div>
+                        
+                        <!-- Commission Display -->
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Commission (1%): <strong id="commissionDisplay">Rs. 0</strong>
+                        </div>
+                        
+                        <!-- Payment Options -->
+                        <div class="alert alert-warning">
+                            <h6 class="fw-bold">Payment Options</h6>
+                            <p class="mb-1"><strong>E-Sewa:</strong> 9745390311</p>
+                            <p class="mb-1"><strong>Khalti:</strong> 9745390311</p>
+                            <p class="mb-0"><strong>Bank Transfer:</strong> NMB Bank, Account: 1234567890</p>
+                        </div>
+                        
+                        <!-- Payment Confirmation -->
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="paymentConfirm" name="paymentConfirm" required>
+                            <label class="form-check-label" for="paymentConfirm">
+                                I have paid the commission amount
+                            </label>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-success w-100 py-2">
+                            <i class="fas fa-check-circle me-2"></i> Confirm & Complete Deal
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.querySelector('input[name="price"]').addEventListener('input', function() {
+    var amount = parseFloat(this.value) || 0;
+    var commission = amount * 0.01;
+    document.getElementById('commissionDisplay').innerText = 'Rs. ' + commission.toFixed(2);
+});
+</script>
+{% endblock %}

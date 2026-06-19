@@ -1,0 +1,109 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<style>
+    .animate-fade {
+        opacity: 0;
+        animation: fadeUp 0.8s ease forwards;
+    }
+    .animate-delay-1 { animation-delay: 0.2s; }
+    .animate-delay-2 { animation-delay: 0.4s; }
+    .animate-delay-3 { animation-delay: 0.6s; }
+    
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .contact-card {
+        transition: all 0.3s ease;
+    }
+    .contact-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+</style>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 text-center animate-fade">
+            <h1 class="fw-bold mb-3" style="color: #1A2A3A;">
+                <i class="fas fa-envelope me-2" style="color: #D4AF37;"></i>
+                Contact Us
+            </h1>
+            <p class="lead text-muted">We'd love to hear from you</p>
+            <div class="divider mx-auto" style="width: 80px; height: 4px; background: #D4AF37; border-radius: 4px; margin: 20px auto;"></div>
+        </div>
+    </div>
+
+    <div class="row mt-4 g-4">
+        <div class="col-md-4 animate-fade animate-delay-1">
+            <div class="card contact-card border-0 shadow-sm h-100 text-center p-4">
+                <div class="card-body">
+                    <i class="fas fa-envelope fa-3x" style="color: #1A7F64;"></i>
+                    <h5 class="fw-bold mt-3">Email</h5>
+                    <p class="text-muted">info@propertyconnect.com</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 animate-fade animate-delay-2">
+            <div class="card contact-card border-0 shadow-sm h-100 text-center p-4">
+                <div class="card-body">
+                    <i class="fas fa-phone fa-3x" style="color: #D4AF37;"></i>
+                    <h5 class="fw-bold mt-3">Phone</h5>
+                    <p class="text-muted">+977 9745390311</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 animate-fade animate-delay-3">
+            <div class="card contact-card border-0 shadow-sm h-100 text-center p-4">
+                <div class="card-body">
+                    <i class="fas fa-map-marker-alt fa-3x" style="color: #1A7F64;"></i>
+                    <h5 class="fw-bold mt-3">Address</h5>
+                    <p class="text-muted">Kathmandu, Nepal</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4 g-4">
+        <div class="col-md-6 animate-fade animate-delay-1">
+            <div class="card border-0 shadow-sm p-4">
+                <h5 class="fw-bold"><i class="fas fa-clock me-2" style="color: #D4AF37;"></i>Working Hours</h5>
+                <ul class="list-unstyled mt-3">
+                    <li class="py-1"><span class="fw-semibold">Monday - Friday:</span> 9 AM - 6 PM</li>
+                    <li class="py-1"><span class="fw-semibold">Saturday:</span> 10 AM - 4 PM</li>
+                    <li class="py-1"><span class="fw-semibold">Sunday:</span> Closed</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-6 animate-fade animate-delay-2">
+            <div class="card border-0 shadow-sm p-4">
+                <h5 class="fw-bold"><i class="fas fa-share-alt me-2" style="color: #D4AF37;"></i>Follow Us</h5>
+                <div class="d-flex gap-3 mt-3">
+                    <a href="#" class="btn btn-outline-primary rounded-circle" style="width: 50px; height: 50px;"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="btn btn-outline-info rounded-circle" style="width: 50px; height: 50px;"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="btn btn-outline-danger rounded-circle" style="width: 50px; height: 50px;"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="btn btn-outline-success rounded-circle" style="width: 50px; height: 50px;"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4 animate-fade animate-delay-3">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm p-4">
+                <h5 class="fw-bold"><i class="fas fa-paper-plane me-2" style="color: #D4AF37;"></i>Send Us a Message</h5>
+                <form>
+                    <div class="row g-3 mt-2">
+                        <div class="col-md-6"><input type="text" class="form-control" placeholder="Your Name"></div>
+                        <div class="col-md-6"><input type="email" class="form-control" placeholder="Your Email"></div>
+                        <div class="col-12"><textarea class="form-control" rows="3" placeholder="Your Message"></textarea></div>
+                        <div class="col-12"><button class="btn btn-primary">Send Message <i class="fas fa-arrow-right ms-2"></i></button></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

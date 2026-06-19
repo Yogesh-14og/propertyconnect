@@ -1,0 +1,334 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<style>
+    /* Netflix Style Horizontal Scroll */
+    .scroll-container {
+        display: flex;
+        gap: 16px;
+        overflow-x: auto;
+        padding: 16px 0 20px 0;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+    }
+    
+    .scroll-container::-webkit-scrollbar {
+        height: 8px;
+    }
+    
+    .scroll-container::-webkit-scrollbar-track {
+        background: rgba(255,255,255,0.05);
+        border-radius: 10px;
+    }
+    
+    .scroll-container::-webkit-scrollbar-thumb {
+        background: #D4AF37;
+        border-radius: 10px;
+    }
+    
+    .scroll-item {
+        flex: 0 0 220px;
+        scroll-snap-align: start;
+        transition: transform 0.3s ease;
+    }
+    
+    .scroll-item:hover {
+        transform: scale(1.05);
+    }
+    
+    .scroll-item .property-card {
+        height: 100%;
+        min-height: 280px;
+    }
+    
+    .scroll-item .property-card img {
+        height: 150px;
+        width: 100%;
+        object-fit: cover;
+    }
+    
+    /* Section Header with Scroll Buttons */
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    
+    .scroll-btn {
+        background: rgba(255,255,255,0.1);
+        border: none;
+        color: #fff;
+        padding: 8px 16px;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 14px;
+    }
+    
+    .scroll-btn:hover {
+        background: #D4AF37;
+        color: #1A2A3A;
+    }
+    
+    @media (max-width: 768px) {
+        .scroll-item {
+            flex: 0 0 160px;
+        }
+        .scroll-item .property-card {
+            min-height: 220px;
+        }
+        .scroll-item .property-card img {
+            height: 100px;
+        }
+    }
+</style>
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-7">
+                <h1>Find Your <span>Dream Property</span> in Nepal</h1>
+                <p>Buy, Sell, and Rent with Nepal's most trusted property platform</p>
+                <form method="GET" action="{% url 'search' %}" class="search-bar d-flex mt-4">
+                    <input type="text" name="q" class="form-control" placeholder="Search by location, property type..." required>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search me-2"></i>Search
+                    </button>
+                </form>
+                <div class="row mt-4">
+                    <div class="col-4">
+                        <div class="stat-box">
+                            <h3>500+</h3>
+                            <p>Properties</p>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="stat-box">
+                            <h3>200+</h3>
+                            <p>Happy Buyers</p>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="stat-box">
+                            <h3>50+</h3>
+                            <p>Cities</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5 d-none d-md-block text-center">
+                <div class="bg-white bg-opacity-10 rounded-circle p-5 d-inline-block" style="border: 2px solid rgba(212, 175, 55, 0.3);">
+                    <i class="fas fa-home fa-5x" style="color: #D4AF37;"></i>
+                </div>
+                <div class="mt-3">
+                    <h5 class="text-white fw-bold">PropertyConnect</h5>
+                    <p style="color: #e9ecef;">Nepal's Trusted Marketplace</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container" id="properties">
+    
+    {% if featured %}
+    <div class="mb-5">
+        <div class="section-header">
+            <div class="section-title">
+                <i class="fas fa-star"></i> Featured Properties
+                <span class="badge-featured ms-2">Top Picks</span>
+            </div>
+            <div>
+                <button class="scroll-btn" onclick="scrollLeft('featuredScroll')">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="scroll-btn" onclick="scrollRight('featuredScroll')">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+        <div class="scroll-container" id="featuredScroll">
+            {% for post in featured %}
+            <div class="scroll-item">
+                <div class="property-card" onclick="location.href='{% url 'property_detail' post.id %}'">
+                    {% if post.image %}
+                        <img src="{{ post.image.url }}" alt="{{ post.title }}">
+                    {% else %}
+                        <div style="height: 150px; background: #e9ecef; display: flex; align-items: center; justify-content: center; color: #6c757d;">
+                            <i class="fas fa-home fa-2x"></i>
+                        </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-1">
+                            <h6 class="card-title mb-0">{{ post.title|truncatechars:15 }}</h6>
+                            {% if post.property_type == 'sell' %}
+                                <span class="badge-sell">Sale</span>
+                            {% elif post.property_type == 'rent' %}
+                                <span class="badge-rent">Rent</span>
+                            {% else %}
+                                <span class="badge-buy">Buy</span>
+                            {% endif %}
+                        </div>
+                        <p class="card-text mb-1 small"><i class="fas fa-map-marker-alt me-1" style="color: var(--secondary);"></i>{{ post.location }}</p>
+                        <h6 class="price-tag mb-0">रु {{ post.price }}</h6>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- For Sale - Netflix Style Horizontal Scroll -->
+    <div class="mb-5">
+        <div class="section-header">
+            <div class="section-title">
+                <i class="fas fa-tag"></i> For Sale
+                <span class="badge-sell ms-2">Hot Deals</span>
+            </div>
+            <div>
+                <button class="scroll-btn" onclick="scrollLeft('saleScroll')">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="scroll-btn" onclick="scrollRight('saleScroll')">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+        {% if sell %}
+        <div class="scroll-container" id="saleScroll">
+            {% for post in sell %}
+            <div class="scroll-item">
+                <div class="property-card" onclick="location.href='{% url 'property_detail' post.id %}'">
+                    {% if post.image %}
+                        <img src="{{ post.image.url }}" alt="{{ post.title }}">
+                    {% else %}
+                        <div style="height: 150px; background: #e9ecef; display: flex; align-items: center; justify-content: center; color: #6c757d;">
+                            <i class="fas fa-home fa-2x"></i>
+                        </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h6 class="card-title mb-1">{{ post.title|truncatechars:20 }}</h6>
+                        <p class="card-text mb-1 small"><i class="fas fa-map-marker-alt me-1" style="color: var(--secondary);"></i>{{ post.location }}</p>
+                        <h6 class="price-tag mb-0">रु {{ post.price }}</h6>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-muted">No properties for sale yet.</p>
+        {% endif %}
+    </div>
+
+    <!-- For Rent - Netflix Style Horizontal Scroll -->
+    <div class="mb-5">
+        <div class="section-header">
+            <div class="section-title">
+                <i class="fas fa-home"></i> For Rent
+                <span class="badge-rent ms-2">Available Now</span>
+            </div>
+            <div>
+                <button class="scroll-btn" onclick="scrollLeft('rentScroll')">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="scroll-btn" onclick="scrollRight('rentScroll')">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+        {% if rent %}
+        <div class="scroll-container" id="rentScroll">
+            {% for post in rent %}
+            <div class="scroll-item">
+                <div class="property-card" onclick="location.href='{% url 'property_detail' post.id %}'">
+                    {% if post.image %}
+                        <img src="{{ post.image.url }}" alt="{{ post.title }}">
+                    {% else %}
+                        <div style="height: 150px; background: #e9ecef; display: flex; align-items: center; justify-content: center; color: #6c757d;">
+                            <i class="fas fa-home fa-2x"></i>
+                        </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h6 class="card-title mb-1">{{ post.title|truncatechars:20 }}</h6>
+                        <p class="card-text mb-1 small"><i class="fas fa-map-marker-alt me-1" style="color: var(--secondary);"></i>{{ post.location }}</p>
+                        <h6 class="price-tag mb-0">रु {{ post.price }}</h6>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-muted">No properties for rent yet.</p>
+        {% endif %}
+    </div>
+
+    <!-- Latest Listings - Netflix Style Horizontal Scroll -->
+    <div class="mb-5">
+        <div class="section-header">
+            <div class="section-title">
+                <i class="fas fa-clock"></i> Latest Listings
+                <span class="badge-featured ms-2">New</span>
+            </div>
+            <div>
+                <button class="scroll-btn" onclick="scrollLeft('latestScroll')">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="scroll-btn" onclick="scrollRight('latestScroll')">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+        {% if latest %}
+        <div class="scroll-container" id="latestScroll">
+            {% for post in latest %}
+            <div class="scroll-item">
+                <div class="property-card" onclick="location.href='{% url 'property_detail' post.id %}'">
+                    {% if post.image %}
+                        <img src="{{ post.image.url }}" alt="{{ post.title }}">
+                    {% else %}
+                        <div style="height: 150px; background: #e9ecef; display: flex; align-items: center; justify-content: center; color: #6c757d;">
+                            <i class="fas fa-home fa-2x"></i>
+                        </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-1">
+                            <h6 class="card-title mb-0">{{ post.title|truncatechars:15 }}</h6>
+                            {% if post.property_type == 'sell' %}
+                                <span class="badge-sell">Sale</span>
+                            {% elif post.property_type == 'rent' %}
+                                <span class="badge-rent">Rent</span>
+                            {% else %}
+                                <span class="badge-buy">Buy</span>
+                            {% endif %}
+                        </div>
+                        <p class="card-text mb-1 small"><i class="fas fa-map-marker-alt me-1" style="color: var(--secondary);"></i>{{ post.location }}</p>
+                        <h6 class="price-tag mb-0">रु {{ post.price }}</h6>
+                        <p class="card-text small text-muted mb-0"><i class="fas fa-user-circle me-1"></i>{{ post.user.username }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-muted">No properties listed yet. <a href="{% url 'post_property' %}" style="color: var(--secondary);">Post your property now!</a></p>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+// Scroll functions
+function scrollLeft(id) {
+    const container = document.getElementById(id);
+    container.scrollBy({ left: -250, behavior: 'smooth' });
+}
+
+function scrollRight(id) {
+    const container = document.getElementById(id);
+    container.scrollBy({ left: 250, behavior: 'smooth' });
+}
+</script>
+{% endblock %}

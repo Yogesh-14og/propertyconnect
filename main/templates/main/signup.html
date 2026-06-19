@@ -1,0 +1,100 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="card shadow-lg border-0" style="width: 100%; max-width: 480px; background: #fff; border-radius: 16px;">
+        <div class="card-body p-5">
+            <!-- Header -->
+            <div class="text-center mb-4">
+                <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex p-3 mb-3">
+                    <i class="fas fa-user-plus fa-2x" style="color: #1A7F64;"></i>
+                </div>
+                <h3 class="fw-bold" style="color: #1A2A3A;">Create Account</h3>
+                <p class="text-muted small">Join PropertyConnect today</p>
+            </div>
+
+            <!-- Form -->
+            <form method="post">
+                {% csrf_token %}
+                
+                {% for field in form %}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold" style="color: #1A2A3A; font-size: 0.9rem;">
+                            <i class="fas fa-{% if field.name == 'username' %}user{% elif field.name == 'password1' or field.name == 'password2' %}lock{% else %}envelope{% endif %} me-2" style="color: #1A7F64;"></i>
+                            {{ field.label }}
+                        </label>
+                        {{ field }}
+                        {% if field.help_text %}
+                            <div class="form-text text-muted small mt-1">{{ field.help_text|safe }}</div>
+                        {% endif %}
+                        {% for error in field.errors %}
+                            <span class="text-danger small d-block mt-1"><i class="fas fa-exclamation-circle me-1"></i> {{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+
+                <button type="submit" class="btn btn-primary w-100 py-2 mt-2" style="background: #1A7F64; border: none; font-weight: 600;">
+                    <i class="fas fa-user-plus me-2"></i> Sign Up
+                </button>
+            </form>
+
+            <!-- Footer Link -->
+            <div class="mt-4 pt-3 text-center border-top">
+                <p class="mb-0 text-muted small">
+                    Already have an account? 
+                    <a href="{% url 'login' %}" class="fw-bold" style="color: #1A7F64; text-decoration: none;">
+                        Login
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Override Django default form styles */
+    form input, form select {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1px solid #E2E8F0;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        color: #1A2A3A;
+        transition: all 0.3s;
+        background: #fff;
+    }
+
+    form input:focus, form select:focus {
+        outline: none;
+        border-color: #1A7F64;
+        box-shadow: 0 0 0 3px rgba(26, 127, 100, 0.12);
+    }
+
+    form input::placeholder {
+        color: #94A3B8;
+        font-size: 0.9rem;
+    }
+
+    .form-text {
+        font-size: 0.8rem !important;
+        color: #64748B !important;
+    }
+
+    .form-text ul {
+        padding-left: 20px;
+        margin-bottom: 0;
+    }
+
+    .form-text ul li {
+        list-style-type: disc;
+        margin-bottom: 2px;
+    }
+
+    /* Button hover */
+    .btn-primary:hover {
+        background: #0F6A52 !important;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(26, 127, 100, 0.3);
+    }
+</style>
+{% endblock %}

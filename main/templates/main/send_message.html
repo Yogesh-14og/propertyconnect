@@ -1,0 +1,40 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <h4 class="fw-bold mb-4">
+                        <i class="fas fa-paper-plane me-2" style="color: #1A7F64;"></i>
+                        Send Message
+                    </h4>
+                    
+                    <div class="card bg-light p-3 mb-3">
+                        <p><strong>Property:</strong> {{ property.title }}</p>
+                        <p><strong>Owner:</strong> {{ property.user.username }}</p>
+                    </div>
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">Subject</label>
+                            <input type="text" name="subject" class="form-control" 
+                                   placeholder="e.g., Interested in your property" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Message</label>
+                            <textarea name="message" class="form-control" rows="5" 
+                                      placeholder="Write your message here..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-paper-plane me-2"></i> Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

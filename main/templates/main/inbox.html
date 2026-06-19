@@ -1,0 +1,91 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="fw-bold">
+            <i class="fas fa-inbox me-2" style="color: #1A7F64;"></i>
+            Inbox
+            {% if unread_count > 0 %}
+                <span class="badge bg-danger">{{ unread_count }}</span>
+            {% endif %}
+        </h1>
+        <div>
+            <button class="btn btn-outline-secondary btn-sm" onclick="location.reload()">
+                <i class="fas fa-sync me-1"></i> Refresh
+            </button>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- Received Messages -->
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h5 class="fw-bold">
+                        <i class="fas fa-arrow-down me-2" style="color: #1A7F64;"></i>
+                        Received
+                        <span class="badge bg-secondary ms-2">{{ received|length }}</span>
+                    </h5>
+                    <hr>
+                    {% if received %}
+                        {% for msg in received %}
+                            <div class="border-bottom py-2 {% if not msg.is_read %}bg-light{% endif %}">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <a href="{% url 'message_detail' msg.id %}" class="text-decoration-none text-dark flex-grow-1">
+                                        <div class="d-flex justify-content-between">
+                                            <strong>{{ msg.sender.username }}</strong>
+                                            <small class="text-muted">{{ msg.created_at|timesince }} ago</small>
+                                        </div>
+                                        <p class="mb-1"><strong>{{ msg.subject }}</strong></p>
+                                        <p class="text-muted small mb-0">{{ msg.message|truncatechars:80 }}</p>
+                                        {% if not msg.is_read %}
+                                            <span class="badge bg-danger">New</span>
+                                        {% endif %}
+                                    </a>
+                                    <!-- ✅ Reply Button -->
+                                    <a href="{% url 'reply_message' msg.id %}" class="btn btn-success btn-sm ms-2 flex-shrink-0">
+                                        <i class="fas fa-reply"></i> Reply
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted text-center py-3">No messages received.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sent Messages -->
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h5 class="fw-bold">
+                        <i class="fas fa-arrow-up me-2" style="color: #1A7F64;"></i>
+                        Sent
+                        <span class="badge bg-secondary ms-2">{{ sent|length }}</span>
+                    </h5>
+                    <hr>
+                    {% if sent %}
+                        {% for msg in sent %}
+                            <div class="border-bottom py-2">
+                                <a href="{% url 'message_detail' msg.id %}" class="text-decoration-none text-dark">
+                                    <div class="d-flex justify-content-between">
+                                        <strong>To: {{ msg.receiver.username }}</strong>
+                                        <small class="text-muted">{{ msg.created_at|timesince }} ago</small>
+                                    </div>
+                                    <p class="mb-1"><strong>{{ msg.subject }}</strong></p>
+                                    <p class="text-muted small mb-0">{{ msg.message|truncatechars:80 }}</p>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted text-center py-3">No messages sent.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

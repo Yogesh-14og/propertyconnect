@@ -1,0 +1,52 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-bold">
+            <i class="fas fa-search me-2" style="color: #1A7F64;"></i>
+            Search Results
+        </h4>
+        <span class="badge bg-secondary">{{ count }} results found</span>
+    </div>
+
+    {% if query %}
+        <p class="text-muted">Showing results for: <strong>"{{ query }}"</strong></p>
+    {% endif %}
+
+    {% if results %}
+        <div class="row g-4">
+            {% for post in results %}
+            <div class="col-md-4 col-lg-3">
+                <div class="property-card" onclick="location.href='{% url 'property_detail' post.id %}'">
+                    {% if post.image %}
+                        <img src="{{ post.image.url }}" alt="{{ post.title }}" style="height: 150px; width: 100%; object-fit: cover;">
+                    {% endif %}
+                    <div class="card-body">
+                        <h6 class="card-title fw-bold">{{ post.title|truncatechars:20 }}</h6>
+                        <p class="card-text small text-muted">
+                            <i class="fas fa-map-marker-alt me-1" style="color: #1A7F64;"></i>{{ post.location }}
+                        </p>
+                        <h6 class="price-tag">रु {{ post.price }}</h6>
+                        <span class="badge-sell">{{ post.get_property_type_display }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-home fa-4x text-muted mb-3 d-block"></i>
+            <h5>No properties found</h5>
+            <p class="text-muted">Try searching with different keywords.</p>
+            <a href="{% url 'home' %}" class="btn btn-primary">Browse All Properties</a>
+        </div>
+    {% endif %}
+
+    <div class="mt-4">
+        <a href="{% url 'home' %}" class="text-muted">
+            <i class="fas fa-arrow-left me-1"></i> Back to Home
+        </a>
+    </div>
+</div>
+{% endblock %}

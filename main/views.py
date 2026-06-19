@@ -379,11 +379,11 @@ def complete_deal(request, pk):
         # Email to buyer
         try:
             send_mail(
-                subject='✅ Deal Confirmed - PropertyConnect',
+                subject='Deal Confirmed - PropertyConnect',
                 message=f"""
 Dear {request.user.username},
 
-🎉 Congratulations! Your deal has been confirmed.
+Congratulations! Your deal has been confirmed.
 
 Property: {property.title}
 Price: Rs.{price}
@@ -401,7 +401,7 @@ Thank you for using PropertyConnect!
         # Email to seller
         try:
             send_mail(
-                subject='🔔 Your property has been {transaction_type}ed!',
+                subject='Your property has been {transaction_type}ed!',
                 message=f"""
 Dear {property.user.username},
 
@@ -423,7 +423,7 @@ Thank you for using PropertyConnect!
         # Email to admin
         try:
             send_mail(
-                subject='🔔 New Transaction Pending Approval',
+                subject='New Transaction Pending Approval',
                 message=f"""
 Transaction ID: #{transaction.id}
 Property: {property.title}
@@ -441,7 +441,7 @@ Please login to admin panel to approve.
         except Exception as e:
             print(f"Email error: {e}")
         
-        messages.success(request, f'✅ Deal completed! Commission: Rs.{commission:.2f}. Waiting for admin approval.')
+        messages.success(request, f'Deal completed! Commission: Rs.{commission:.2f}. Waiting for admin approval.')
         return redirect('dashboard')
     
     return render(request, 'main/complete_deal.html', {'property': property})

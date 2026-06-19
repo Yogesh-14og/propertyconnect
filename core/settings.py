@@ -135,3 +135,8 @@ EMAIL_HOST_PASSWORD = 'qjau hrft znqu aoom'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 ADMIN_EMAIL = 'khatriyogesh552@gmail.com'
 
+# Session Security
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SECURE = True  # HTTPS मा मात्र
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Browser बन्द गर्दा logout
+
